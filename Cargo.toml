@@ -1,0 +1,16 @@
+[package]
+name = "apples_of_eden"
+version = "0.1.0"
+authors = ["palinko <arpad.palinkas@gmail.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+solana-client = "1.14.1"
+solana-program = "1.14.1"
+solana-sdk = "1.14.1"
+solana-account-decoder = "1.14.1"
+tokio = "1.21.1"
+anyhow = "1.0.65"
+futures = "0.3.24"
