@@ -7,12 +7,25 @@ use solana_client::{
 };
 use solana_sdk::{clock::Slot, commitment_config::CommitmentConfig, pubkey::Pubkey};
 use std::str::FromStr;
+use std::{env, sync::Arc, time::Duration};
+
+mod lib;
+
+pub use lib::crawler::Crawler;
+pub use lib::spiders::magiceden::MagicSpider;
 
 // Solana RPC wss URL change node provider if needed
 const URL: &str = "ws://api.mainnet-beta.solana.com";
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    // Create the scraper instance and makes the webscrape with the most up to date collections info and saves into a file
+    let spider = MagicSpider::new().await?;
+    let spider = Arc::new(spider);
+    let crawler = Crawler::new(Duration::from_millis(200), 2, 500);
+    crawler.run(spider).await;
+
+    // Making an RPC client
     let rpc_client = PubsubClient::new(URL).await?;
     // Set the minimum slot that the request can be evaluated at.
     let slot: Slot = 1;
@@ -52,4 +65,6 @@ async fn main() -> Result<()> {
         println!("{:?}", me_event);
         println!("---------------");
     }
+
+    Ok(())
 }
