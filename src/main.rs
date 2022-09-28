@@ -12,6 +12,7 @@ use std::{env, sync::Arc, time::Duration};
 mod lib;
 
 pub use lib::crawler::Crawler;
+pub use lib::filters::{read, Collections};
 pub use lib::spiders::magiceden::MagicSpider;
 
 // Solana RPC wss URL change node provider if needed
@@ -24,6 +25,12 @@ async fn main() -> Result<()> {
     let spider = Arc::new(spider);
     let crawler = Crawler::new(Duration::from_millis(200), 2, 500);
     crawler.run(spider).await;
+
+    //Testing the filters
+    let mut a: Collections = read("./src/collections/collections.json").await.unwrap();
+    let a = a.drop_empty_collections().await;
+    let b = a.get_address("odes").await;
+    println!("{:?}",b);
 
     // Making an RPC client
     let rpc_client = PubsubClient::new(URL).await?;

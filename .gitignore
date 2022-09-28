@@ -1,4 +1,4 @@
 /target
-/src/collections
+collections/
 Cargo.lock
 .env
